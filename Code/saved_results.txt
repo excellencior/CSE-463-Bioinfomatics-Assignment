@@ -1,6 +1,13 @@
+Randomized Motif Discovery Algorithm
+------------------------------------
+We introduced "Random Restart" in the algorithm, as the complexity of the algorithm is exponential and it would end up taking a huge time for generating result. In case of being stuck at a local maxima, the random restarts checks for any improvement, if none, it restarts the process from the beginning and thus the stuck at local maxima problem is solved.
+Also, at each iteration, each generated motif is checked using entropy of the found best result for improvement. Upon a lesser entropy improvent the result is updated.
+
 k = 100
 max_iterations = 10
 restart_threshold = 5 # Number of iterations before restart
+
+>> RUN-1
 
 GACTAGTTACATTGATCAAAGGGCAATAGAAATGATCCAGTGAGGATTTGTCTGAATTTCCCACAATTATTTAAAATCTACCTCAAATACCTGTTCATCT
 ATAATAATTGTAGCTAACATTTAGGAGGGTGCTCCTATCTGCAAAACTCCATGATGAGTGCTTTACAAGGATTATTTCATTTATTCACAAACAGTCCTTT
@@ -14,7 +21,7 @@ AGGATCTGTGCCGCTGCGTCGGGCCTGTGGGGCGCCTCCGGGGGTCTGAAACTGGAGGAGACTCGGGGCTGTAGGGCGCG
 GGGGCTTTGCCTGTCATTCTGCAGTTCTAGTGTGGGGTCTGGGCGCAGTTCTTTTCCCTCTCCAGCCTCGGAGTCTTCCTCTGTGGACTGCGCAGATAGG
 
 
-
+>> RUN-2
 Adding entropy scoring along with the difference scoring
 The result seems to have been improved quite a bit
 
@@ -30,38 +37,151 @@ GGGCACGCGGGCACGTGGCTGTCCCCAGGGGCCTGGCTTGGGTCTCGCCCCTGGGCCGGGGCGCACTCGCGGGCGGGACA
 CTCTGCAGCCCTGGAGTCAGGAGCAGAGCCCCCCGGCTCCCAGCCCGCCGTAGCCGCTCCTGGCACCGAGCGAGCCGCGATGACAATGGCTGCATTGTGC
 
 
+>> Sample run on hm03
+
+Number of sequences available: 10
+-----------------------------------------------
+Length of k-mer: 10
+Maximum iterations: 1000
+Restart threshold: 10  # For random restart
+-----------------------------------------------
+Sequence     Motif           Sequence length
+-----------------------------------------------
+Sequence 1   TTTCAGAAGC      1500
+Sequence 2   TAAAATCTGC      1500
+Sequence 3   TGGGAGGAAT      1500
+Sequence 4   GTCTGGTATT      1500
+Sequence 5   TGGAGCCCAG      1500
+Sequence 6   AAAAGTGAAC      1500
+Sequence 7   TATTGTTTGT      1500
+Sequence 8   GTCTGGAGCC      1500
+Sequence 9   TAGAGAAAGG      1500
+Sequence 10  GATGACAATG      1500
+-----------------------------------------------
+Entropy of the generated motifs: 1.8382767346590885
+
+
+Number of sequences available: 10
+-----------------------------------------------
+Length of k-mer: 5
+Maximum iterations: 1000
+Restart threshold: 10  # For random restart
+-----------------------------------------------
+Sequence     Motif           Sequence length
+-----------------------------------------------
+Sequence 1   TTTGC           1500
+Sequence 2   TTTGC           1500
+Sequence 3   TTTGC           1500
+Sequence 4   TTTGC           1500
+Sequence 5   TTTGC           1500
+Sequence 6   TTTGC           1500
+Sequence 7   TTTGC           1500
+Sequence 8   TTTGC           1500
+Sequence 9   TTTGC           1500
+Sequence 10  TTTGC           1500
+-----------------------------------------------
+Entropy of the generated motifs: 1.0892300788425848
+This is the lowest possible entropy for 10 sequences. We wouldnot get entropy zero for the reason that we are using Laplace's Rule of Succession which would increase the overall entropy.
+
+
+
 >> Sample run on yst08r
 
-Number of sequences available: 7
+Number of sequences available: 11
 -----------------------------------------------
-Sequence     Motif           Sequence length     
+Length of k-mer: 10
+Maximum iterations: 1000
+Restart threshold: 10  # For random restart
 -----------------------------------------------
-Sequence 1   GGAAGTGTTT      1000
-Sequence 2   CCAAAAAATC      1000
-Sequence 3   TTTACATGAA      1000
-Sequence 4   TTAACGACAA      1000
-Sequence 5   TTAACAGTCA      1000
-Sequence 6   GCGTCCAGCA      1000
-Sequence 7   GATCTTAGCT      1000
+Sequence     Motif           Sequence length
 -----------------------------------------------
-Entropy of the generated motifs: 1.8413640102792797
+Sequence 1   AACGTCCACT      1000
+Sequence 2   TATTTGACAT      1000
+Sequence 3   TATCGTTTGA      1000
+Sequence 4   TCAGTACAAA      1000
+Sequence 5   GCAGGCAAAG      1000
+Sequence 6   GAGTTAGCAT      1000
+Sequence 7   AATTTCCCCT      1000
+Sequence 8   TGCCATTAAA      1000
+Sequence 9   TACGAGTGGA      1000
+Sequence 10  ACCCAGACAC      1000
+Sequence 11  ACAGGGAATA      1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.840932163859744
 
+
+
+Number of sequences available: 11
+-----------------------------------------------
+Length of k-mer: 5
+Maximum iterations: 1000
+Restart threshold: 10  # For random restart
+-----------------------------------------------
+Sequence     Motif           Sequence length
+-----------------------------------------------
+Sequence 1   AGAAA           1000
+Sequence 2   AGAAA           1000
+Sequence 3   AGAAA           1000
+Sequence 4   AGAAA           1000
+Sequence 5   AGAAA           1000
+Sequence 6   AGAAA           1000
+Sequence 7   AGAAA           1000
+Sequence 8   AGAAA           1000
+Sequence 9   AGAAA           1000
+Sequence 10  AGAAA           1000
+Sequence 11  AGAAA           1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.0389205950315936
+This is the lowest possible entropy for 11 sequences. We wouldnot get entropy zero for the reason that we are using Laplace's Rule of Succession which would increase the overall entropy.
+
+// -----------------------------------------------------------------------
+
+Gibbs Sampling Algorithm
+------------------------
 
 >> Sample run on hm03
 
 Number of sequences available: 10
 -----------------------------------------------
-Sequence     Motif           Sequence length     
+Length of k-mer: 10
+Number of iterations: 10000
 -----------------------------------------------
-Sequence 1   TCCACTGGAC      1500
-Sequence 2   AGAGAAAGTG      1500
-Sequence 3   TGCTGATTGT      1500
-Sequence 4   AACATGTGAT      1500
-Sequence 5   CAACCCAAGA      1500
-Sequence 6   AAACAAAACG      1500
-Sequence 7   CTGAAACTTG      1500
-Sequence 8   GAGATAAACT      1500
-Sequence 9   CTGTTGCATG      1500
-Sequence 10  TTTCATGATA      1500
+Sequence     Motif           Sequence length
 -----------------------------------------------
-Entropy of the generated motifs: 1.9181339907476052
+Sequence 1   GCTTAGCAGG      1500
+Sequence 2   GCAATTTTAG      1500
+Sequence 3   AGCTTCACTC      1500
+Sequence 4   TATACTCACA      1500
+Sequence 5   GCTTCTCAGA      1500
+Sequence 6   CTTAGGAAAT      1500
+Sequence 7   TCAGGCTGGT      1500
+Sequence 8   GAGTCAGCTA      1500
+Sequence 9   CACATACAGG      1500
+Sequence 10  ATAGAAGGCA      1500
+-----------------------------------------------
+Entropy of the generated motifs: 1.9307137696224088
+
+
+>> Sample run on yst08r
+
+Number of sequences available: 11
+-----------------------------------------------
+Length of k-mer: 10
+Number of iterations: 10000
+-----------------------------------------------
+Sequence     Motif           Sequence length
+-----------------------------------------------
+Sequence 1   GTCAAGAGGT      1000
+Sequence 2   TCGTACAAAC      1000
+Sequence 3   GAGGCTCGTG      1000
+Sequence 4   TTTTATTCTT      1000
+Sequence 5   TTTCGCTCTT      1000
+Sequence 6   GCTGTAGCTA      1000
+Sequence 7   CGTTAATTAC      1000
+Sequence 8   TGACGTTATA      1000
+Sequence 9   AGATCATTTA      1000
+Sequence 10  GTAATTGCTT      1000
+Sequence 11  AACGGGAGCG      1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.9280264168682701
+
