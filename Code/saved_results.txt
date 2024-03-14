@@ -291,3 +291,46 @@ Sequence 11  AAAAAATCAA      1000
 -----------------------------------------------
 Entropy of the generated motifs: 1.2371330848120432
 
+
+Number of sequences available: 11
+-----------------------------------------------  
+Length of k-mer: 5
+Number of iterations:  1000
+-----------------------------------------------  
+Sequence     Motif           Sequence length     
+-----------------------------------------------  
+Sequence 1   AAGGT           1000
+Sequence 2   AAGAT           1000
+Sequence 3   AAGAT           1000
+Sequence 4   AAGAT           1000
+Sequence 5   AAGTT           1000
+Sequence 6   AAGAT           1000
+Sequence 7   AAGAT           1000
+Sequence 8   AAGAT           1000
+Sequence 9   AAGAT           1000
+Sequence 10  AAGAT           1000
+Sequence 11  AAGAT           1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.1162575158286636
+
+
+Number of sequences available: 11
+-----------------------------------------------
+Length of k-mer: 15
+Number of iterations:  1000
+-----------------------------------------------
+Sequence     Motif           Sequence length
+-----------------------------------------------
+Sequence 1   AAAAAAAAAGAAAAA 1000
+Sequence 2   TATATAAAAAAAAAA 1000
+Sequence 3   AAAAAAAATATATAA 1000
+Sequence 4   AAAAAAAAAAAAAAA 1000
+Sequence 5   TCAAAAAAGAAAAAA 1000
+Sequence 6   ACTAGCAATAACAAA 1000
+Sequence 7   AAAAGAAAAAAGAGA 1000
+Sequence 8   AAAAGAAAGAAAAAA 1000
+Sequence 9   AAAGTAAAAAAAAAA 1000
+Sequence 10  ACAACAAATATAAAA 1000
+Sequence 11  ACTACAAAAAACACA 1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.3673784865647722
