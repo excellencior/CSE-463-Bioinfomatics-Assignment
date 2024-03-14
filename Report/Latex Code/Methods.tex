@@ -1,0 +1,241 @@
+\section{Methods : }
+In this study, we employed two distinct computational approaches to identify motifs within a given set of DNA sequences: Randomized Motif Search and Gibbs Sampling. Both methods aim to discover common patterns or sequences, known as motifs, which are believed to play significant roles in regulatory functions and other biological processes.
+
+\subsection{Randomized Motif Search : }
+The Randomized Motif Search algorithm begins by randomly selecting k-mers from each sequence in the dataset. It then iteratively refines these motifs by constructing a profile matrix based on the current motifs and using this profile to guide the selection of new, potentially more representative k-mers from each sequence. The algorithm terminates when no improvement in the motif score is observed, returning the best set of motifs found.
+\subsubsection{Pseudocode : }
+\begin{lstlisting}[caption=Pseudocode for Randomized Motif search, mathescape=true]
+RandomizedMotifSearch(Dna, k, t)
+    randomly select k-mers Motifs = $(Motif_{1}, Motif_{2}, ... , Motif_{t})$ in each string from Dna
+    BestMotifs $\leftarrow$ Motifs
+    while forever
+        Profile $\leftarrow$ PROFILE(Motifs)
+        Motifs $\leftarrow$ MOTIFS(Profile, Dna)
+        if SCORE(Motifs) < SCORE(BestMotifs)
+            BestMotifs $\leftarrow$ Motifs
+        else
+            return BestMotifs
+\end{lstlisting}
+This approach is characterized by its stochastic nature, allowing it to escape local optima by continually sampling the space of possible motifs. However, its performance can be highly dependent on the initial random motifs selected.
+
+
+
+\subsection{Gibbs Sampling : }
+Gibbs Sampling, another stochastic technique, offers a more nuanced approach by iteratively updating the set of motifs. In each iteration, it randomly selects one sequence and replaces its current motif with a new one, chosen based on a probabilistic model that considers the motifs in all other sequences. This process allows the algorithm to explore the motif space more thoroughly by making one sequence at a time subject to change.
+\subsubsection{Pseudocode :}
+
+\begin{lstlisting}[caption=Pseudocode for Gibbs Sampling, mathescape=true]
+GIBBSSAMPLER(Dna, k, t, N)
+    randomly select k-mers Motifs = $(Motif_{1}, Motif_{2}, ... , Motif_{t})$ in each string from Dna
+    BestMotifs $\leftarrow$ Motifs
+    for j $\leftarrow$ 1 to N
+        i $\leftarrow$ RANDOM(t)
+        Profile $\leftarrow$ profile matrix formed from all strings in Motifs except for $Motif_{i}$
+        $Motif_{i} \leftarrow$ Profile-randomly generated k-mer in the i-th sequence
+    if SCORE(Motifs) < SCORE(BestMotifs)
+        BestMotifs $\leftarrow$ Motifs
+    return BestMotifs
+\end{lstlisting}
+Gibbs Sampling's strength lies in its ability to more effectively navigate the search space by considering the impact of individual sequences on the overall motif model. This can potentially lead to a more accurate and representative discovery of motifs.
+
+\subsection{Python code implementation}
+In this section, we delve into the practical application of the motif finding algorithms discussed earlier—Randomized Motif Search and Gibbs Sampling—through their implementation in Python. The code segments provided below encapsulate the core logic and sub-methods integral to each algorithm's operation, facilitating the identification of conserved motifs within DNA sequences.
+\subsubsection{Basic submethods : Scanning DNA, Random Selctions and Printing motif matrix}
+At the foundation of our implementation are several basic submethods crucial for both algorithms:
+\begin{itemize}
+    \item \textbf{Scanning DNA: } The \texttt{read\_file} function is designed to ingest a file containing DNA sequences and return a list of these sequences, each stripped of newline characters for seamless processing.
+    \item \textbf{Random Selections:} The \texttt{RandomlySelectKmers} function exemplifies the stochastic nature of our approach by randomly selecting k-mers from the provided DNA sequences, setting the initial state for motif exploration. Additionally, the \texttt{RandomlySelectKmers} function is employed in Gibbs Sampling to randomly choose a motif for re-sampling, further illustrating the probabilistic underpinnings of our methods.
+    \item \textbf{Printing Motif Matrix:} The \texttt{print\_mat} function allows for the visualization of the motif matrix, enabling an intuitive understanding of the motifs identified by the algorithms
+\end{itemize}
+
+\begin{minted}[linenos, bgcolor= backcolour ]{python}
+
+import random
+import math
+
+# Variable declarations
+k = 100
+max_iterations = 1000
+restart_threshold = 10  # Number of iterations before restart
+
+def print_mat(mat):
+    for x in mat:
+        print(x)
+
+def read_file(filename):
+    with open(filename, 'r') as file:
+        lines = [line.strip() for line in file.readlines()] 
+        # To get rid of the trailing \n
+    return lines
+
+def RandomlySelectKmers(dna, k):
+    t = len(dna)
+    kmer_list = []
+    for i in range(t):
+        start = random.randint(0, len(dna[i]) - k)
+        kmer_list.append(dna[i][start:start + k])
+    return kmer_list
+
+def RandomlySelectElimMotif(dna):
+    t = len(dna)
+    return random.randint(0, t-1)
+
+\end{minted}
+
+\subsubsection{Creating Profile}
+
+This sub-method takes a motif matrix as input and gives the profile string as output
+Central to both Randomized Motif Search and Gibbs Sampling is the construction of a profile matrix from a given set of motifs, as performed by the \textbf{Profile} function. This matrix, reflecting the relative frequency of each nucleotide at every position in the motifs, serves as a probabilistic model for motif occurrence.
+
+\begin{minted}[linenos, bgcolor= backcolour ]{python}
+
+def Profile(motifs):
+    t = len(motifs)
+    k = len(motifs[0])
+    profile = [[1 for i in range(k)] for j in range(4)] 
+    # Laplace's Rule of Succession (Init at 1)
+    for i in range(t):
+        for j in range(k):
+            if (motifs[i][j] == 'A'):
+                profile[0][j] += 1
+            elif (motifs[i][j] == 'C'):
+                profile[1][j] += 1
+            elif (motifs[i][j] == 'G'):
+                profile[2][j] += 1
+            elif (motifs[i][j] == 'T'):
+                profile[3][j] += 1
+    for i in range(4):
+        for j in range(k):
+            profile[i][j] /= (t + 4)
+    return profile
+    
+\end{minted}
+
+\subsubsection{Identifying the position of motif from a DNA sequence string}
+This sub-method takes a DNA sequence as input and gives the best suited motif as output
+The \textbf{MOTIFS} function showcases the algorithmic capability to discern the most probable motif within a DNA sequence, guided by the profile matrix. This function iterates through possible k-mers within the sequence, calculating their likelihood based on the current profile and selecting the k-mer with the highest probability.
+
+\begin{minted}[linenos, bgcolor= backcolour ]{python}
+
+def MOTIFS(text, k, profile):
+    max_prob = -1
+    kmer = text[:k]
+    for i in range(len(text) - k + 1):
+        prob = 1
+        for j in range(k):
+            if (text[i + j] == 'A'):
+                prob *= profile[0][j]
+            elif (text[i + j] == 'C'):
+                prob *= profile[1][j]
+            elif (text[i + j] == 'G'):
+                prob *= profile[2][j]
+            elif (text[i + j] == 'T'):
+                prob *= profile[3][j]
+        if (prob > max_prob):
+            max_prob = prob
+            kmer = text[i:i + k]
+    return kmer
+    
+\end{minted}
+
+\subsubsection{Scoring}
+
+This score method takes a motif matrix as input and gives the score as output. The scoring method used here is implemented with hamming distance heuristics. The method also enhances random restart mechanism for improvising the performance and minimizing the entropy.
+
+\begin{minted}[linenos, bgcolor= backcolour ]{python}
+
+def Score(motifs):
+    t = len(motifs)
+    k = len(motifs[0])
+    score = 0
+    for j in range(k):
+        count = {'A': 1, 'C': 1, 'G': 1, 'T': 1}  
+        # Laplace's Rule of Succession (Init at 1)
+        for i in range(t):
+            count[motifs[i][j]] += 1
+        entropy = 0
+        for nucleotide, nucleotide_count in count.items():
+            probability = nucleotide_count / (t + 4)  
+            # Pseudocount for Laplace's Rule of Succession
+            entropy -= probability * math.log2(probability)
+        score += 2 - entropy  # Maximized entropy is 2 for 4 nucleotides
+    return score
+    
+\end{minted}
+
+\subsubsection{ The Randomized Motif Search }
+This subsection introduces the \textbf{randomized\_motif\_search} function, embodying the iterative logic of the Randomized Motif Search algorithm. The function iteratively refines the set of motifs by leveraging the profile matrix to guide the selection of more representative k-mers, with the incorporation of a random restart mechanism to avoid local optima.
+\begin{minted}[linenos, bgcolor= backcolour ]{python}
+
+def randomized_motif_search(dna, k, max_iterations, restart_threshold):
+    best_motifs = RandomlySelectKmers(dna, k)
+    best_score = Score(best_motifs)
+    current_iteration = 0
+    iteration_count = 0
+    while current_iteration < max_iterations:
+        motifs = RandomlySelectKmers(dna, k)
+        while True:
+            profile = Profile(motifs)
+            motifs = ["" for i in range(len(dna))]
+            for i in range(len(dna)):
+                motifs[i] = MOTIFS(dna[i], k, profile)  
+                # P - most probable k-mer in the i-th string
+            current_score = Score(motifs)
+            if current_score < best_score:
+                best_motifs = motifs
+                best_score = current_score
+                iteration_count = 0
+            elif iteration_count >= restart_threshold:
+                break  # Perform random restart
+            else:
+                iteration_count += 1
+                motifs = motifs
+        current_iteration += 1
+    return best_motifs
+
+# Example usage:
+dna = read_file("yst04r.txt")
+best_motifs = randomized_motif_search(dna, k, max_iterations, restart_threshold)
+print_mat(best_motifs)
+
+\end{minted}
+
+\subsubsection{ The Gibbs Sampling }
+Similarly, the GibbsSampler function encapsulates the Gibbs Sampling algorithm, emphasizing the iterative update of individual motifs. This function iteratively selects and updates one motif at a time based on a profile constructed from the remaining motifs, allowing for a nuanced exploration of the motif space.
+
+\begin{minted}[linenos, bgcolor= backcolour ]{python}
+
+def GibbsSampler(dna, k, N):
+    t = len(dna)  # Number of sequences
+    n = len(dna[0])  # Length of each sequence
+    motifs = RandomlySelectKmers(dna, k)  # Initialize motifs randomly
+    best_motifs = motifs[:]  # Initialize the best motifs with the initial random motifs
+
+    for _ in range(N):
+        i = random.randint(0, t - 1)  # Randomly select a sequence index i
+        motif_i = motifs[i]  # Get the motif of the selected sequence
+
+        # Remove the current motif from the profile
+        profile_motifs = motifs[:i] + motifs[i + 1:]
+
+        # Construct profile matrix from the other motifs
+        profile = Profile(profile_motifs)
+
+        # Select a new motif for sequence i using the profile
+        motif_i = MOTIFS(dna[i], k, profile)
+
+        # Update the motifs list with the new motif for sequence i
+        motifs[i] = motif_i
+
+        # Update the best motifs if necessary
+        if Score(motifs) < Score(best_motifs):
+            best_motifs = motifs[:]
+
+    return best_motifs
+
+# Example usage:
+dna = read_file("hm03.txt")
+best_motifs = GibbsSampler(dna, k, max_iterations)
+print_mat(best_motifs)
+
+\end{minted}
