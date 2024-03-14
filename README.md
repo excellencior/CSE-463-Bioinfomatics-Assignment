@@ -136,6 +136,73 @@ This is the lowest possible entropy for 7 sequences. We would not get entropy ze
 
 **Entropy of the generated motifs:** 1.5054170720285864
 
+## Sample run on yst08r
+
+- **Number of sequences available:** 11
+- **Length of k-mer:** 10
+- **Maximum iterations:** 1000
+- **Restart threshold:** 10  # For random restart
+
+| Sequence   | Motif       | Sequence length |
+|------------|-------------|-----------------|
+| Sequence 1 | TCTTTTGTTT  | 1000            |
+| Sequence 2 | TTTTTTTTCT  | 1000            |
+| Sequence 3 | TTTTTTTTTT  | 1000            |
+| Sequence 4 | TTTTTTTTTT  | 1000            |
+| Sequence 5 | TTTTTTGTTT  | 1000            |
+| Sequence 6 | TTTTTTATTT  | 1000            |
+| Sequence 7 | TTTTTTTTTT  | 1000            |
+| Sequence 8 | TTTTTTTTTT  | 1000            |
+| Sequence 9 | TTTTTTCTAT  | 1000            |
+| Sequence 10| TTTTTTCTTT  | 1000            |
+| Sequence 11| TTTTTTGTTT  | 1000            |
+
+**Entropy of the generated motifs:** 1.1823936534688424
+
+- **Number of sequences available:** 11
+- **Length of k-mer:** 5
+- **Maximum iterations:** 1000
+- **Restart threshold:** 10  # For random restart
+
+| Sequence   | Motif       | Sequence length |
+|------------|-------------|-----------------|
+| Sequence 1 | AGAAA       | 1000            |
+| Sequence 2 | AGAAA       | 1000            |
+| Sequence 3 | AGAAA       | 1000            |
+| Sequence 4 | AGAAA       | 1000            |
+| Sequence 5 | AGAAA       | 1000            |
+| Sequence 6 | AGAAA       | 1000            |
+| Sequence 7 | AGAAA       | 1000            |
+| Sequence 8 | AGAAA       | 1000            |
+| Sequence 9 | AGAAA       | 1000            |
+| Sequence 10| AGAAA       | 1000            |
+| Sequence 11| AGAAA       | 1000            |
+
+**Entropy of the generated motifs:** 1.0389205950315936
+This is the lowest possible entropy for 11 sequences. We would not get entropy zero for the reason that we are using Laplace's Rule of Succession which would increase the overall entropy.
+
+- **Number of sequences available:** 11
+- **Length of k-mer:** 15
+- **Maximum iterations:** 1000
+- **Restart threshold:** 10  # For random restart
+
+| Sequence   | Motif           | Sequence length |
+|------------|-----------------|-----------------|
+| Sequence 1 | TTTATTTTACTTCTT | 1000            |
+| Sequence 2 | TTTTTTTTCTCCATT | 1000            |
+| Sequence 3 | TTTTTTTAGCTCATT | 1000            |
+| Sequence 4 | TTTTTATTCTTAACT | 1000            |
+| Sequence 5 | TTCTTTTTTTTAATT | 1000            |
+| Sequence 6 | ATTCTATTTTTTATT | 1000            |
+| Sequence 7 | TTTTTTTTTTTGATT | 1000            |
+| Sequence 8 | TTTTTTTTTTCCATT | 1000            |
+| Sequence 9 | TTGTGATGTTTTATC | 1000            |
+| Sequence 10| TTTTTATTTTAGATT | 1000            |
+| Sequence 11| TTTTTCTTTTTAATT | 1000            |
+
+**Entropy of the generated motifs:** 1.3913574276603924
+
+
 # Gibbs Sampling Algorithm
 ---------------------------
 
