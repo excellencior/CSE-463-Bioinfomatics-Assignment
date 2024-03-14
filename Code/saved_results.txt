@@ -71,7 +71,64 @@ Sequence 10  CTAAAGGTGAAAAGG 1500
 -----------------------------------------------
 Entropy of the generated motifs: 1.479303304549106
 
+>> Sample run on yst04r
 
+Number of sequences available: 7
+-----------------------------------------------
+Length of k-mer: 10
+Maximum iterations: 1000
+Restart threshold: 10  # For random restart
+-----------------------------------------------
+Sequence     Motif           Sequence length
+-----------------------------------------------
+Sequence 1   TTTTTTTCTT      1000
+Sequence 2   TATTTTTCTT      1000
+Sequence 3   TATTTTTTTT      1000
+Sequence 4   TTTTTTTCTT      1000
+Sequence 5   TATTTTACTT      1000
+Sequence 6   TATTTTTCTT      1000
+Sequence 7   TATTTTTTTT      1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.366878805297442
+
+
+Number of sequences available: 7
+-----------------------------------------------  
+Length of k-mer: 5
+Maximum iterations: 1000
+Restart threshold: 10  # For random restart      
+-----------------------------------------------  
+Sequence     Motif           Sequence length     
+-----------------------------------------------  
+Sequence 1   TTAAT           1000
+Sequence 2   TTAAT           1000
+Sequence 3   TTAAT           1000
+Sequence 4   TTAAT           1000
+Sequence 5   TTAAT           1000
+Sequence 6   TTAAT           1000
+Sequence 7   TTAAT           1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.2776134368191154
+This is the lowest possible entropy for 7 sequences. We wouldnot get entropy zero for the reason that we are using Laplace's Rule of Succession which would increase the overall entropy.
+
+
+Number of sequences available: 7
+-----------------------------------------------  
+Length of k-mer: 15
+Maximum iterations: 1000
+Restart threshold: 10  # For random restart      
+-----------------------------------------------  
+Sequence     Motif           Sequence length     
+-----------------------------------------------  
+Sequence 1   TTTTTTTTTCTTTCC 1000
+Sequence 2   AATATTTTTCTTTTT 1000
+Sequence 3   TATTATTTTTATATT 1000
+Sequence 4   TTTTTTTTTCTTTTC 1000
+Sequence 5   TACTTCTTTCTTGTA 1000
+Sequence 6   TTTATTTTTCTTTTC 1000
+Sequence 7   TATTTTTTTTTTGTT 1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.5054170720285864
 
 >> Sample run on yst08r
 
