@@ -171,6 +171,48 @@ Sequence 10  TGCTGAGTCT      1500
 -----------------------------------------------
 Entropy of the generated motifs: 1.412808773081848
 
+
+Number of sequences available: 10
+-----------------------------------------------  
+Length of k-mer: 5
+Number of iterations:  1000
+-----------------------------------------------  
+Sequence     Motif           Sequence length     
+-----------------------------------------------  
+Sequence 1   AATGA           1500
+Sequence 2   AATGA           1500
+Sequence 3   AATGA           1500
+Sequence 4   AATGA           1500
+Sequence 5   AATGA           1500
+Sequence 6   AATGA           1500
+Sequence 7   AATGA           1500
+Sequence 8   AATGC           1500
+Sequence 9   AATGA           1500
+Sequence 10  AATGA           1500
+-----------------------------------------------
+Entropy of the generated motifs: 1.1297224625016797
+
+
+Number of sequences available: 10
+-----------------------------------------------  
+Length of k-mer: 15
+Number of iterations:  1000
+-----------------------------------------------  
+Sequence     Motif           Sequence length     
+-----------------------------------------------  
+Sequence 1   GAGAAGAGAAAATGA 1500
+Sequence 2   AAGCAAACAAAATAA 1500
+Sequence 3   GAGCAAACAAAATAA 1500
+Sequence 4   GAGAAAGGAAAAAAA 1500
+Sequence 5   TAGAAGAGAAGGAAA 1500
+Sequence 6   GAAAACACAAAAAGA 1500
+Sequence 7   GAGAAGACACAATAA 1500
+Sequence 8   TAGTAAGTAAAATAA 1500
+Sequence 9   GAAAAAAAAAAAAAA 1500
+Sequence 10  GAGCTCAGAAAATGA 1500
+-----------------------------------------------
+Entropy of the generated motifs: 1.4227919097643442
+
 >> Sample run on yst04r
 
 Number of sequences available: 7
@@ -189,6 +231,42 @@ Sequence 6   AACTGGCATC      1000
 Sequence 7   TTCCGGCAAG      1000
 -----------------------------------------------   
 Entropy of the generated motifs: 1.493625565197716
+
+
+Number of sequences available: 7
+-----------------------------------------------  
+Length of k-mer: 5
+Number of iterations:  1000
+-----------------------------------------------  
+Sequence     Motif           Sequence length     
+-----------------------------------------------  
+Sequence 1   TCCTA           1000
+Sequence 2   TCCTA           1000
+Sequence 3   TGCTA           1000
+Sequence 4   TCCTA           1000
+Sequence 5   TCCTA           1000
+Sequence 6   TCCTA           1000
+Sequence 7   TCCTA           1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.3203137194663295
+
+
+Number of sequences available: 7
+-----------------------------------------------
+Length of k-mer: 15
+Number of iterations:  1000
+-----------------------------------------------
+Sequence     Motif           Sequence length
+-----------------------------------------------
+Sequence 1   TTGCAAAAAGAACAA 1000
+Sequence 2   TTTCCAAAAAATCAA 1000
+Sequence 3   TAGGAAAAGAAAAAA 1000
+Sequence 4   TTTGAAATAAAAAAA 1000
+Sequence 5   TTTCATAAAAAACCA 1000
+Sequence 6   ATATAAAAAAAAAAA 1000
+Sequence 7   TTCCTAAAAAAAAAA 1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.5233667301963683
 
 >> Sample run on yst08r
 
