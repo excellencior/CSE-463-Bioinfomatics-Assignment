@@ -3,8 +3,7 @@ import math
 
 # Variable declarations
 k = 10
-max_iterations = 10
-restart_threshold = 10  # Number of iterations before restart
+max_iterations = 1000
 
 # Methods
 def print_mat(mat):
@@ -13,7 +12,7 @@ def print_mat(mat):
 
 def read_file(filename):
     with open(filename, 'r') as file:
-        lines = [line.strip() for line in file.readlines()]  # To get rid of the trailing \n
+        lines = [line.strip() for line in file.readlines()] # To get rid of the trailing \n
     return lines
 
 def RandomlySelectKmers(dna, k):
@@ -24,19 +23,24 @@ def RandomlySelectKmers(dna, k):
         kmer_list.append(dna[i][start:start + k])
     return kmer_list
 
+def RandomlySelectElimMotif(dna):
+    t = len(dna)
+    return random.randint(0, t-1)
+
+
 def Profile(motifs):
     t = len(motifs)
     k = len(motifs[0])
-    profile = [[1 for i in range(k)] for j in range(4)]  # Laplace's Rule of Succession (Init at 1)
+    profile = [[1 for i in range(k)] for j in range(4)] # Laplace's Rule of Succession (Init at 1)
     for i in range(t):
         for j in range(k):
-            if motifs[i][j] == 'A':
+            if (motifs[i][j] == 'A'):
                 profile[0][j] += 1
-            elif motifs[i][j] == 'C':
+            elif (motifs[i][j] == 'C'):
                 profile[1][j] += 1
-            elif motifs[i][j] == 'G':
+            elif (motifs[i][j] == 'G'):
                 profile[2][j] += 1
-            elif motifs[i][j] == 'T':
+            elif (motifs[i][j] == 'T'):
                 profile[3][j] += 1
     for i in range(4):
         for j in range(k):
@@ -49,33 +53,54 @@ def MOTIFS(text, k, profile):
     for i in range(len(text) - k + 1):
         prob = 1
         for j in range(k):
-            if text[i + j] == 'A':
+            if (text[i + j] == 'A'):
                 prob *= profile[0][j]
-            elif text[i + j] == 'C':
+            elif (text[i + j] == 'C'):
                 prob *= profile[1][j]
-            elif text[i + j] == 'G':
+            elif (text[i + j] == 'G'):
                 prob *= profile[2][j]
-            elif text[i + j] == 'T':
+            elif (text[i + j] == 'T'):
                 prob *= profile[3][j]
-        if prob > max_prob:
+        if (prob > max_prob):
             max_prob = prob
             kmer = text[i:i + k]
     return kmer
+
+# def Score(motifs):
+#     t = len(motifs)
+#     k = len(motifs[0])
+#     score = 0
+#     for i in range(k):
+#         count = [0, 0, 0, 0]
+#         for j in range(t):
+#             if (motifs[j][i] == 'A'):
+#                 count[0] += 1
+#             elif (motifs[j][i] == 'C'):
+#                 count[1] += 1
+#             elif (motifs[j][i] == 'G'):
+#                 count[2] += 1
+#             elif (motifs[j][i] == 'T'):
+#                 count[3] += 1
+#         score += (t - max(count))
+#     return score
 
 def Score(motifs):
     t = len(motifs)
     k = len(motifs[0])
     score = 0
     for j in range(k):
-        count = {'A': 1, 'C': 1, 'G': 1, 'T': 1}  # Laplace's Rule of Succession (Init at 1)
+        count = {'A': 1, 'C': 1, 'G': 1, 'T': 1}  
+        # Laplace's Rule of Succession (Init at 1)
         for i in range(t):
             count[motifs[i][j]] += 1
         entropy = 0
         for nucleotide, nucleotide_count in count.items():
-            probability = nucleotide_count / (t + 4)  # Pseudocount for Laplace's Rule of Succession
+            probability = nucleotide_count / (t + 4)  
+            # Pseudocount for Laplace's Rule of Succession
             entropy -= probability * math.log2(probability)
         score += 2 - entropy  # Maximized entropy is 2 for 4 nucleotides
     return score
+
 
 def entropy(motifs):
     t = len(motifs)
@@ -94,31 +119,26 @@ def entropy(motifs):
     return entropy_score / k  # Normalization by dividing by the total number of positions
 
 
-def randomized_motif_search(dna, k, max_iterations, restart_threshold):
-    best_motifs = RandomlySelectKmers(dna, k)
-    best_score = Score(best_motifs)
-    current_iteration = 0
-    iteration_count = 0
-    while current_iteration < max_iterations:
-        motifs = RandomlySelectKmers(dna, k)
-        while True:
-            profile = Profile(motifs)
-            motifs = ["" for i in range(len(dna))]
-            for i in range(len(dna)):
-                motifs[i] = MOTIFS(dna[i], k, profile)  # P - most probable k-mer in the i-th string
-            current_score = Score(motifs)
-            if current_score < best_score:
-                best_motifs = motifs
-                best_score = current_score
-                iteration_count = 0
-            elif iteration_count >= restart_threshold:
-                break  # Perform random restart
-            else:
-                iteration_count += 1
-                motifs = motifs
-        current_iteration += 1
+# Algorithm for Gibbs Sampling
+def GibbsSampler(dna,k,N):
+    
+    motifs = RandomlySelectKmers(dna, k)
+    best_motifs = motifs
 
-    # Generate report
+    for i in range(N):
+        motifs = RandomlySelectKmers(dna, k)
+        motif_num = RandomlySelectElimMotif(dna)
+        elemMotif = motifs[motif_num]
+        profileMotif = motifs[:]
+        del profileMotif[motif_num]
+        
+        profile = Profile(profileMotif)
+        
+        motifs[motif_num] = MOTIFS(dna[motif_num], k, profile) # P - most probable k-mer in the i-th string
+        if (Score(motifs) < Score(best_motifs)):
+            best_motifs = motifs
+
+     # Generate report
     num_sequences = len(dna)
     print("Number of sequences available:", num_sequences)
     print("-" * 47)
@@ -129,8 +149,9 @@ def randomized_motif_search(dna, k, max_iterations, restart_threshold):
     print("-" * 47)
     print("Entropy of the generated motifs:", entropy(best_motifs))
 
-# Read sequences from file
-dna = read_file("input/yst04r.txt")
-
-# Run randomized motif search and generate report
-randomized_motif_search(dna, k, max_iterations, restart_threshold)
+    return best_motifs
+    
+dna = read_file("hm03.txt")
+best_motifs = GibbsSampler(dna,k,max_iterations)       
+# print_mat(best_motifs)
+# print(Score(best_motifs))
