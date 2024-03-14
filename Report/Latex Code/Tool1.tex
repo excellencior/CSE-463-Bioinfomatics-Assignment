@@ -1,0 +1,206 @@
+\section{Software}
+
+\subsection{TOOL NAME: rGADEM}
+\vspace{8pt}
+\textbf{Language} : R \\ \\
+The code is written in R terminal provided by the R environment.
+
+\subsubsection{Software Link}
+The tool can be found at: https://bioconductor.org/packages/release/bioc/html/rGADEM.html
+
+\subsubsection{Commands to Run}
+\begin{minted}[linenos, bgcolor= backcolour ]{R}
+pwd <- "D:/rgadem" # Set the working directory
+fastaFileName <- "result.fasta" 
+# Define the filename for the FASTA file
+FastaFile <- file.path(pwd, fastaFileName) 
+# Create the file path to the FASTA file
+Sequences <- readDNAStringSet(FastaFile, "fasta") 
+# Read sequences from the FASTA file
+gadem <- GADEM(Sequences, verbose = 1) 
+# Execute the GADEM algorithm with the sequences
+motifs <- gadem@motifList 
+# Extract the motifs from the GADEM object
+print(motifs) # Print the motifs
+nMotifs(gadem) # Count the number of motifs
+consensus(gadem) # Find the consensus motif
+\end{minted}
+
+
+\subsubsection{Explanation}
+
+\begin{lstlisting}
+- `pwd <- "D:/rgadem"`: 
+This line sets the working directory to "D:/rgadem".
+
+- `fastaFileName <- "result.fasta"`: 
+Here, the filename for the FASTA file is defined as "result.fasta".
+
+- `FastaFile <- file.path(pwd, fastaFileName)`: 
+This line creates the file path to the FASTA file by combining the working directory path (`pwd`) and the FASTA filename (`fastaFileName`).
+
+- `Sequences <- readDNAStringSet(FastaFile, "fasta")`: 
+Reads sequences from the FASTA file located at `FastaFile` using the `readDNAStringSet` function, specifying that the file format is FASTA.
+
+- `gadem <- GADEM(Sequences, verbose = 1)`: 
+Executes the GADEM algorithm with the sequences stored in `Sequences`, setting the verbosity level to 1 (i.e., printing detailed output).
+
+- `motifs <- gadem@motifList`: 
+Extracts the motifs identified by the GADEM algorithm from the GADEM object `gadem`.
+
+- `print(motifs)`: 
+Prints the extracted motifs.
+
+- `nMotifs(gadem)`: 
+Counts the number of motifs identified by the GADEM algorithm.
+
+- `consensus(gadem)`: 
+Finds the consensus motif among the identified motifs using the GADEM algorithm.
+\end{lstlisting}
+\textbf{Bioconductor} biostrings package along with rGADEM package is used as the processing unit of FASTA files for motif discovery from the given data.
+\\
+\\
+
+
+\subsubsection{Sample output}
+
+
+
+\begin{lstlisting}
+* Start C Programm *
+========================================================================================
+input sequence file:  
+number of sequences and average length:                         10 1500.0
+Use pgf method to approximate llr null distribution
+parameters estimated from sequences in:  
+
+number of GA generations & population size:                     5 100
+
+PWM score p-value cutoff for binding site declaration:          2.000000e-04
+ln(E-value) cutoff for motif declaration:                       0.000000
+
+number of EM steps:                                             40
+minimal no. sites considered for a motif:                       2
+
+[a,c,g,t] frequencies in input data:                            0.268596 0.231404 0.231404 0.268596
+========================================================================================
+* Running an unseeded analysis *
+GADEM cycle  1: enumerate and count k-mers... top 3  4, 5-mers: 16 40 34
+Done.
+Initializing GA... Done.
+GADEM cycle[  1] generation[  1] number of unique motif: 1
+   spacedDyad: caganntctgt          motifConsensus: CAGCrCTCTGT           1.00 fitness:   -9.49
+
+GADEM cycle[  1] generation[  2] number of unique motif: 1
+   spacedDyad: caganntctgt          motifConsensus: CAGCrCTCTGT           1.00 fitness:   -9.49
+
+GADEM cycle[  1] generation[  3] number of unique motif: 1
+   spacedDyad: caggantctgt          motifConsensus: CAGCrCTCTGT           0.10 fitness:   -9.49
+
+GADEM cycle[  1] generation[  4] number of unique motif: 1
+   spacedDyad: caggantctgt          motifConsensus: CAGCrCTCTGT           0.10 fitness:   -9.49
+
+GADEM cycle[  1] generation[  5] number of unique motif: 1
+   spacedDyad: caggantctgt          motifConsensus: CAGCrCTCTGT           0.10 fitness:   -9.49
+
+\end{lstlisting}
+
+\subsubsection{Limitations}
+
+\begin{itemize}
+
+    \item \textbf{Algorithm limitations :} The motif detection algorithm may have limitations or biases that result in the identification of more motifs than expected.
+
+    \item \textbf{Overlapping motifs :} Motifs can overlap with each other, especially if they are short or if there are repetitive sequences in the input data. This can lead to multiple motifs being identified within the same sequence region.
+    
+\end{itemize}
+
+The sample output for such a scenerio is given here:
+
+\begin{lstlisting}
+
+seq_list <- list(
+    "TTTTTTTTTTTTTAGGAAG",
+    "TTTTTTTTTTTTTCCTTGT",
+    "ATTTTTTTTTTTTCTTTCT",
+    "ATTTTTTTTTCTTTCCTCT",
+    "CTTTTTTTTTCTTCCTTCT",
+    "GCTTTTTTTTTTTATATAT",
+    "CTTTTTTTTTCTTTTCTCT",
+    "ATTTTTTTTTTGTTAAAAT",
+    "GTTTTTTTCTTTTCCTATT",
+    "CTATTTTTTTTTTTTTTTT",
+    "CTTTTTTTTATTTCAAATT",
+    "GTTTTGTTCTTTTTGCAAA",
+    "ATTTTTTGTTTGTATTCTT",
+    "CTTTTTCTCTTTTTTACAG",
+    "ATTTTTCTTTTCTTAGTTT",
+    "CTTGTTTCTTTTTCTGCAC",
+    "CTATTTTTTTCTTCCTTAT",
+    "ATATTTTTCTTTTTAATTC",
+    "GTTTTTTATTCTTAACTTG"
+)
+
+\end{lstlisting}
+
+
+\subsubsection{Detailed output}
+It can be observed that rGADEM analysis uses masking of properly motif offset which includes the discovered motifs and also it maybe the reason for duplicate motif finding from the strings. 
+\begin{lstlisting}
+
+* Start C Programm *
+========================================================================================
+input sequence file:  
+number of sequences and average length:                         11 1000.0
+Use pgf method to approximate llr null distribution
+parameters estimated from sequences in:  
+
+number of GA generations & population size:                     5 100
+
+PWM score p-value cutoff for binding site declaration:          2.000000e-04
+ln(E-value) cutoff for motif declaration:                       0.000000
+
+number of EM steps:                                             40
+minimal no. sites considered for a motif:                       2
+
+[a,c,g,t] frequencies in input data:                            0.303892 0.196108 0.196108 0.303892
+========================================================================================
+* Running an unseeded analysis *
+GADEM cycle  1: enumerate and count k-mers... top 3  4, 5-mers: 6 12 16
+Done.
+Initializing GA... Done.
+GADEM cycle[  1] generation[  1] number of unique motif: 1
+   spacedDyad: aagannnaaa           motifConsensus: AAAAAAAAAA            0.60 fitness:  -15.82
+
+GADEM cycle[  1] generation[  2] number of unique motif: 1
+   spacedDyad: aagaannngaa          motifConsensus: AAGAAAAArAA           0.40 fitness:  -16.72
+
+GADEM cycle[  1] generation[  3] number of unique motif: 1
+   spacedDyad: aaaannngaaag         motifConsensus: AAAAAAAAAAAA          1.00 fitness:  -19.21
+
+GADEM cycle[  1] generation[  4] number of unique motif: 1
+   spacedDyad: aaaannngaaag         motifConsensus: AAAAAAAAAAAA          1.00 fitness:  -19.21
+
+GADEM cycle[  1] generation[  5] number of unique motif: 1
+   spacedDyad: aaaannngaaag         motifConsensus: AAAAAAAAAAAA          1.00 fitness:  -19.21
+
+* Running an unseeded analysis *
+GADEM cycle  2: enumerate and count k-mers... top 3  4, 5-mers: 10 6 8
+Done.
+Initializing GA... Done.
+GADEM cycle[  2] generation[  1] number of unique motif: 1
+   spacedDyad: tttcnnnnctt          motifConsensus: TTTCCCyCCTT           0.50 fitness:   12.22
+
+GADEM cycle[  2] generation[  2] number of unique motif: 1
+   spacedDyad: ttccnnnnctt          motifConsensus: TTCCCCTCyTT           0.50 fitness:   12.14
+
+GADEM cycle[  2] generation[  3] number of unique motif: 1
+   spacedDyad: ttccnnncttt          motifConsensus: TTCCCCTCyTT           0.50 fitness:    9.37
+
+GADEM cycle[  2] generation[  4] number of unique motif: 1
+   spacedDyad: ttccnnncttt          motifConsensus: TTCCCCTCyTT           0.50 fitness:    9.37
+
+GADEM cycle[  2] generation[  5] number of unique motif: 1
+   spacedDyad: ttccnnncttt          motifConsensus: TTCCCCTCyTT           0.50 fitness:    9.37
+    
+\end{lstlisting}
