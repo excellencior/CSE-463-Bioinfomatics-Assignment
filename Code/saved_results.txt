@@ -3,40 +3,6 @@ Randomized Motif Discovery Algorithm
 We introduced "Random Restart" in the algorithm, as the complexity of the algorithm is exponential and it would end up taking a huge time for generating result. In case of being stuck at a local maxima, the random restarts checks for any improvement, if none, it restarts the process from the beginning and thus the stuck at local maxima problem is solved.
 Also, at each iteration, each generated motif is checked using entropy of the found best result for improvement. Upon a lesser entropy improvent the result is updated.
 
-k = 100
-max_iterations = 10
-restart_threshold = 5 # Number of iterations before restart
-
->> RUN-1
-
-GACTAGTTACATTGATCAAAGGGCAATAGAAATGATCCAGTGAGGATTTGTCTGAATTTCCCACAATTATTTAAAATCTACCTCAAATACCTGTTCATCT
-ATAATAATTGTAGCTAACATTTAGGAGGGTGCTCCTATCTGCAAAACTCCATGATGAGTGCTTTACAAGGATTATTTCATTTATTCACAAACAGTCCTTT
-TACTATTCATTCTCACCTTAAAGACGAGGAAACTAAGGCAAAGAACAGTCAACTAATAAGTCCAAGTATACAGAGCTGCTAAGGAATAGTCTGTCTGATC
-CAGGGCTTGAATCACATGTGGGCCACAGCAGGAATGGGAACATGGAATTTCTAAGTCCTATCTTACTTGTTATTGTTGCTATGTCTTTTTCTTAGTTTGC
-AGCCAGTGTAGAAAAGCAAACAGGTCAGGCCCGGGAGGCGCCCTTTGGACCTTTTGCAATCCTGGCGCTCTTGCAGCCTGGGCTTCCTATAAATGGGGTG
-GACAGAATGAAAAAAAAATTTTTTTAAAGGAAAACACAAAAAGAATATGCTGTCAACAGGGATGGGAGGAAGACCACCTTTACTGCTATACACATTTGTA
-GCAGAGTTTATTCATTTTATGCTGTATAATATTCCATTATATCCACATACAATGCAGTATTGACCCTTCCTCCTGTTGATGGGCATTTGTCTTGTTTCTA
-TCATTCAACAAATATTTCTGGAACAACTCTTATATGCCAGGCACTATTTTAGGAGTCAGGGATATATAATGGTAAACAAGACAGGCAAAACAAAGCAAAG
-AGGATCTGTGCCGCTGCGTCGGGCCTGTGGGGCGCCTCCGGGGGTCTGAAACTGGAGGAGACTCGGGGCTGTAGGGCGCGCGGATCTGGGGCGCGCCCTC
-GGGGCTTTGCCTGTCATTCTGCAGTTCTAGTGTGGGGTCTGGGCGCAGTTCTTTTCCCTCTCCAGCCTCGGAGTCTTCCTCTGTGGACTGCGCAGATAGG
-
-
->> RUN-2
-Adding entropy scoring along with the difference scoring
-The result seems to have been improved quite a bit
-
-TCCCACAATTATTTAAAATCTACCTCAAATACCTGTTCATCTATAATGCCTCCCCTGAGGCCTTCATTCTGAATAGTACCTCTGTCTCTGTCCCCAAAGC
-ACAGTCCTTTAAAATGACGCCATTATTCATCTTCATCTCACAGATAAGGAAATTAAGGCAAAAAAAATTCAGTGAAATAATAAGTCCAAGTACACAGAAC
-AATAAGGGAATAAAAGCTGGCCACCCAAGACAGCAGCAGCAACCCACTCAGGTCCCCTTCCATGCCATGGAAGCTTTCTTCTTTTGCTCTTCGCAATAAA
-AAGGTACAAATCGTTTAAACTCTTATGTAAAATTTGATAAGATGTTTTACACAACTTTAATACATTGACAAGGTCTTGTGGAGAAAACAGTTCCAGATGG
-CCGAGTGTCCCTGAAATTCCACTACCGCTGATTCCCTCCAGCTGGGCAGAGGCAGCGAGCGCTGGCTGAAGCTTCCGGTGGGAAATGGGCAGTGCCTAGA
-TGAAGAGACCAGGAAGAATAGTATGTGCTATGTGCTGTCCACAGGGCACAGTAGTTCACACCAGCACTTTGTGAGGCTGCTGCGGGAGGATCACTTGAGC
-GTTTGTGGGTCATAGAGTTGCCAGGTTTCTTGGGATTTGTAATAGAACATCACAAGAAAATCAAGTGTGAAGCAAGAGCTCAACTCTTAACAGGGGTATT
-GGGGTCTGGAGCCATCTGTGAGGGATCAGGGCCCTTTCAGCCTTGGCTAGGGAGCAGGGGTCCTGGAACTTCATCCTGGCCCATAGCTGAGTCTGCCCAT
-GGGCACGCGGGCACGTGGCTGTCCCCAGGGGCCTGGCTTGGGTCTCGCCCCTGGGCCGGGGCGCACTCGCGGGCGGGACATCTGGGGGCGCCCACGCGCT
-CTCTGCAGCCCTGGAGTCAGGAGCAGAGCCCCCCGGCTCCCAGCCCGCCGTAGCCGCTCCTGGCACCGAGCGAGCCGCGATGACAATGGCTGCATTGTGC
-
-
 >> Sample run on hm03
 
 Number of sequences available: 10
@@ -47,18 +13,18 @@ Restart threshold: 10  # For random restart
 -----------------------------------------------
 Sequence     Motif           Sequence length
 -----------------------------------------------
-Sequence 1   TTTCAGAAGC      1500
-Sequence 2   TAAAATCTGC      1500
-Sequence 3   TGGGAGGAAT      1500
-Sequence 4   GTCTGGTATT      1500
-Sequence 5   TGGAGCCCAG      1500
-Sequence 6   AAAAGTGAAC      1500
-Sequence 7   TATTGTTTGT      1500
-Sequence 8   GTCTGGAGCC      1500
-Sequence 9   TAGAGAAAGG      1500
-Sequence 10  GATGACAATG      1500
+Sequence 1   GATAAAGGGA      1500
+Sequence 2   GACACAGGGA      1500
+Sequence 3   GACACAGGGA      1500
+Sequence 4   GAAACAGGGA      1500
+Sequence 5   GACACAGGAA      1500
+Sequence 6   GAAACTGGGA      1500
+Sequence 7   GACACAGGAA      1500
+Sequence 8   GAAACAGGAC      1500
+Sequence 9   GGCACAGGGA      1500
+Sequence 10  GAAAAGGGGA      1500
 -----------------------------------------------
-Entropy of the generated motifs: 1.8382767346590885
+Entropy of the generated motifs: 1.3103084497384816
 
 
 Number of sequences available: 10
@@ -84,6 +50,28 @@ Entropy of the generated motifs: 1.0892300788425848
 This is the lowest possible entropy for 10 sequences. We wouldnot get entropy zero for the reason that we are using Laplace's Rule of Succession which would increase the overall entropy.
 
 
+Number of sequences available: 10
+-----------------------------------------------
+Length of k-mer: 15
+Maximum iterations: 1000
+Restart threshold: 10  # For random restart
+-----------------------------------------------
+Sequence     Motif           Sequence length
+-----------------------------------------------
+Sequence 1   GAGAAGAGAAAATGA 1500
+Sequence 2   GAAAAGAGAAAGTGA 1500
+Sequence 3   GAGAGGAGGAAGAGA 1500
+Sequence 4   GAATAGTAAAAAAGA 1500
+Sequence 5   CCAAAATGGAAAAGA 1500
+Sequence 6   GAAAACACAAAAAGA 1500
+Sequence 7   AAAAACTCAAAATGA 1500
+Sequence 8   GTAAAGCTGAAGAGG 1500
+Sequence 9   AAAAAAAAAAAAAGA 1500
+Sequence 10  CTAAAGGTGAAAAGG 1500
+-----------------------------------------------
+Entropy of the generated motifs: 1.479303304549106
+
+
 
 >> Sample run on yst08r
 
@@ -93,21 +81,21 @@ Length of k-mer: 10
 Maximum iterations: 1000
 Restart threshold: 10  # For random restart
 -----------------------------------------------
-Sequence     Motif           Sequence length
+Sequence     Motif           Sequence length     
 -----------------------------------------------
-Sequence 1   AACGTCCACT      1000
-Sequence 2   TATTTGACAT      1000
-Sequence 3   TATCGTTTGA      1000
-Sequence 4   TCAGTACAAA      1000
-Sequence 5   GCAGGCAAAG      1000
-Sequence 6   GAGTTAGCAT      1000
-Sequence 7   AATTTCCCCT      1000
-Sequence 8   TGCCATTAAA      1000
-Sequence 9   TACGAGTGGA      1000
-Sequence 10  ACCCAGACAC      1000
-Sequence 11  ACAGGGAATA      1000
+Sequence 1   TCTTTTGTTT      1000
+Sequence 2   TTTTTTTTCT      1000
+Sequence 3   TTTTTTTTTT      1000
+Sequence 4   TTTTTTTTTT      1000
+Sequence 5   TTTTTTGTTT      1000
+Sequence 6   TTTTTTATTT      1000
+Sequence 7   TTTTTTTTTT      1000
+Sequence 8   TTTTTTTTTT      1000
+Sequence 9   TTTTTTCTAT      1000
+Sequence 10  TTTTTTCTTT      1000
+Sequence 11  TTTTTTGTTT      1000
 -----------------------------------------------
-Entropy of the generated motifs: 1.840932163859744
+Entropy of the generated motifs: 1.1823936534688424
 
 
 
@@ -133,6 +121,28 @@ Sequence 11  AGAAA           1000
 -----------------------------------------------
 Entropy of the generated motifs: 1.0389205950315936
 This is the lowest possible entropy for 11 sequences. We wouldnot get entropy zero for the reason that we are using Laplace's Rule of Succession which would increase the overall entropy.
+
+Number of sequences available: 11
+-----------------------------------------------
+Length of k-mer: 15
+Maximum iterations: 1000
+Restart threshold: 10  # For random restart
+-----------------------------------------------
+Sequence     Motif           Sequence length
+-----------------------------------------------
+Sequence 1   TTTATTTTACTTCTT 1000
+Sequence 2   TTTTTTTTCTCCATT 1000
+Sequence 3   TTTTTTTAGCTCATT 1000
+Sequence 4   TTTTTATTCTTAACT 1000
+Sequence 5   TTCTTTTTTTTAATT 1000
+Sequence 6   ATTCTATTTTTTATT 1000
+Sequence 7   TTTTTTTTTTTGATT 1000
+Sequence 8   TTTTTTTTTTCCATT 1000
+Sequence 9   TTGTGATGTTTTATC 1000
+Sequence 10  TTTTTATTTTAGATT 1000
+Sequence 11  TTTTTCTTTTTAATT 1000
+-----------------------------------------------
+Entropy of the generated motifs: 1.3913574276603924
 
 // -----------------------------------------------------------------------
 
