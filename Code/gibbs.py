@@ -3,7 +3,7 @@ import math
 
 # Variable declarations
 k = 5
-max_iterations = 10000
+max_iterations = 1000
 
 # Methods
 def print_mat(mat):
@@ -107,7 +107,7 @@ def entropy(motifs):
     k = len(motifs[0])
     entropy_score = 0
     for j in range(k):
-        count = {'A': 1, 'C': 1, 'G': 1, 'T': 1}
+        count = {'A': 1, 'C': 1, 'G': 1, 'T': 1}  # Laplace's Rule of Succession with pseudocounts
         for i in range(t):
             count[motifs[i][j]] += 1
         entropy = 0
@@ -120,39 +120,80 @@ def entropy(motifs):
 
 
 # Algorithm for Gibbs Sampling
-def GibbsSampler(dna,k,N):
+# def GibbsSampler(dna,k,N):
     
-    motifs = RandomlySelectKmers(dna, k)
-    best_motifs = motifs
+#     motifs = RandomlySelectKmers(dna, k)
+#     best_motifs = motifs
 
-    for i in range(N):
-        motifs = RandomlySelectKmers(dna, k)
-        motif_num = RandomlySelectElimMotif(dna)
-        elemMotif = motifs[motif_num]
-        profileMotif = motifs[:]
-        del profileMotif[motif_num]
+#     for i in range(N):
+#         motifs = RandomlySelectKmers(dna, k)
+#         motif_num = RandomlySelectElimMotif(dna)
+#         #elemMotif = motifs[motif_num]
+#         profileMotif = motifs[:]
+#         del profileMotif[motif_num]
         
-        profile = Profile(profileMotif)
+#         profile = Profile(profileMotif)
         
-        motifs[motif_num] = MOTIFS(dna[motif_num], k, profile) # P - most probable k-mer in the i-th string
-        if (Score(motifs) < Score(best_motifs)):
-            best_motifs = motifs
+#         motifs[motif_num] = MOTIFS(dna[motif_num], k, profile) # P - most probable k-mer in the i-th string
+#         if (Score(motifs) < Score(best_motifs)):
+#             best_motifs = motifs
 
-     # Generate report
-    num_sequences = len(dna)
-    print("Number of sequences available:", num_sequences)
-    print("-" * 47)
-    print("Length of k-mer:", k)
-    print("Number of iterations:", N)
+#      # Generate report
+#     num_sequences = len(dna)
+#     print("Number of sequences available:", num_sequences)
+#     print("-" * 47)
+#     print("{:<12} {:<15} {:<20}".format("Sequence", "Motif", "Sequence length"))
+#     print("-" * 47)
+#     for i, (sequence, motif) in enumerate(zip(dna, best_motifs)):
+#         print("{:<12} {:<15} {:<20}".format(f"Sequence {i+1}", motif, len(sequence)))
+#     print("-" * 47)
+#     print("Entropy of the generated motifs:", entropy(best_motifs))
+
+#     return best_motifs
+    
+# dna = read_file("hm03.txt")
+# best_motifs = GibbsSampler(dna,k,max_iterations)       
+# print_mat(best_motifs)
+# print(Score(best_motifs))
+
+def GibbsSampler(dna, k, N):
+    t = len(dna)  # Number of sequences
+    n = len(dna[0])  # Length of each sequence
+    motifs = RandomlySelectKmers(dna, k)  # Initialize motifs randomly
+    best_motifs = motifs[:]  # Initialize the best motifs with the initial random motifs
+
+    for _ in range(N):
+        i = random.randint(0, t - 1)  # Randomly select a sequence index i
+        motif_i = motifs[i]  # Get the motif of the selected sequence
+
+        # Remove the current motif from the profile
+        profile_motifs = motifs[:i] + motifs[i + 1:]
+
+        # Construct profile matrix from the other motifs
+        profile = Profile(profile_motifs)
+
+        # Select a new motif for sequence i using the profile
+        motif_i = MOTIFS(dna[i], k, profile)
+
+        # Update the motifs list with the new motif for sequence i
+        motifs[i] = motif_i
+
+        # Update the best motifs if necessary
+        if Score(motifs) < Score(best_motifs):
+            best_motifs = motifs[:]
+
+    # Generate report
+    print("Number of sequences available:", t)
     print("-" * 47)
     print("{:<12} {:<15} {:<20}".format("Sequence", "Motif", "Sequence length"))
     print("-" * 47)
     for i, (sequence, motif) in enumerate(zip(dna, best_motifs)):
-        print("{:<12} {:<15} {:<20}".format(f"Sequence {i+1}", motif, len(sequence)))
+        print("{:<12} {:<15} {:<20}".format(f"Sequence {i + 1}", motif, len(sequence)))
     print("-" * 47)
     print("Entropy of the generated motifs:", entropy(best_motifs))
 
     return best_motifs
-    
-dna = read_file("input/hm03.txt")
-best_motifs = GibbsSampler(dna,k,max_iterations)       
+
+# Example usage:
+dna = read_file("hm03.txt")
+best_motifs = GibbsSampler(dna, k, max_iterations)
